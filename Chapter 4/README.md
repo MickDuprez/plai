@@ -1,4 +1,6 @@
-# Chapter 4 solution - http://cs.brown.edu/courses/cs173/2012/book/first-desugar.html
+# Chapter 4 solution
+
+http://cs.brown.edu/courses/cs173/2012/book/first-desugar.html
 
 This one was tricky for me, the take away from this was to understand the order in which to apply
 the functions. I struggled a bit with the parser and interpreter until I worked out the 'rules' and steps involved.
