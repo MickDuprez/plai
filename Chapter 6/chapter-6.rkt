@@ -1,7 +1,6 @@
 #lang plai-typed
 ;; chapter 6 solution
 
-
 ;; core functions (low level)
 (define-type ExprC
   [numC (n : number)]
@@ -23,19 +22,6 @@
 ;; defining a Function defintion type:
 (define-type FuncDefC
   [fdC (name : symbol) (arg : symbol) (body : ExprC)])
-
-;; subtitutes the parsed values for the symbols in the function bodies.
-(define (subst [what : ExprC] [for : symbol] [in : ExprC]) : ExprC
-  (type-case ExprC in
-    [numC (n) in]
-    [idC (s) (cond
-               [(symbol=? s for) what]
-               [else in])]
-    [appC (f a) (appC f (subst what for a))]
-    [plusC (l r) (plusC (subst what for l)
-                        (subst what for r))]
-    [multC (l r) (multC (subst what for l)
-                        (subst what for r))]))
 
 ;; some more complex function definitions:
 (define double (fdC 'double 'x (plusC (idC 'x) (idC 'x))))
@@ -130,7 +116,7 @@
 (test (interp (desugar (parse '(neg 5))) mt-env fds) -5)
 (test (interp (desugar (parse '(neg -5))) mt-env fds) 5)
 
-;; tests for pasing functions:
+;; tests for passing/calling functions:
 (display "\n**** general arithmetic tests ****\n")
 (test (interp (desugar (parse '(call double 5))) mt-env fds) 10)
 (test (interp (desugar (parse '(call quadruple 5))) mt-env fds) 20)
@@ -152,8 +138,10 @@
                     (fdC 'double 'x (plusC (idC 'x) (idC 'x)))))
       22)
 
-(display "\n**** faulty test ****\n")
-(interp (appC 'f1 (numC 3))
-        mt-env
-        (list (fdC 'f1 'x (appC 'f2 (numC 4)))
-              (fdC 'f2 'y (plusC (idC 'x) (idC 'y)))))
+;; This test failed once we updated the interpreter to pass an mt-env
+;; in the appC case.
+;(display "\n**** faulty test ****\n")
+;(interp (appC 'f1 (numC 3))
+;        mt-env
+;        (list (fdC 'f1 'x (appC 'f2 (numC 4)))
+;              (fdC 'f2 'y (plusC (idC 'x) (idC 'y)))))
