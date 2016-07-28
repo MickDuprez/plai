@@ -13,6 +13,8 @@ The only way I could get the two tests in the book at this section to pass was t
 The test/exn version was more targeted at proving the function was missing with some extra checking code but as we are no longer using substitution, our functions are being evaluated in place they they always exist.
 It's only the variables that disappear.
 
-Implementing closures is coming later in the chapter....
+Implementing closures is coming later in the chapter, maybe that will help but I can't help think a 'stack' like env would and a way to use it with 'scope' could be a solution.
 
 ## Section 7.2 - Nested What?
+
+coming soon...
