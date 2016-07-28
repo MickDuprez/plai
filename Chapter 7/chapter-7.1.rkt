@@ -1,5 +1,5 @@
 #lang plai-typed
-;; chapter 7 solution
+;; chapter 7.1 solution
 
 
 ;; core functions (low level)
@@ -20,11 +20,6 @@
   [bminusS (l : ExprS) (r : ExprS)]
   [multS (l : ExprS) (r : ExprS)]
   [uminusS (e : ExprS)])
-
-;; some more complex function definitions for testing:
-;(define double (fdC 'double 'x (plusC (idC 'x) (idC 'x))))
-;(define quadruple (fdC 'quadruple 'x (appC 'double (appC 'double (idC 'x)))))
-;(define const5 (fdC 'const5 '_ (numC 5)))
 
 ;; core language functions:
 (define (num+ [l : Value] [r : Value]) : Value
@@ -83,36 +78,30 @@
   [funV (name : symbol) (arg : symbol) (body : ExprC)])
 
 ;; the interpreter:
-;; interp : EprC * listof fds * Env -> number
+;; interp : EprC * Env -> Value
 (define (interp [e : ExprC] [env : Env] ) : Value
   (type-case ExprC e
     [numC (n) (numV n)]
     [idC (n) (lookup n env)]
     [appC (f a)
-          (local ([define fd f]) ; create a local func from our fds
-            (interp (fdC-body fd)
-                    (extend-env (bind (fdC-arg fd)
+          (local ([define fd (interp f env)])
+            (interp (funV-body fd)
+                    (extend-env (bind (funV-arg fd)
                                       (interp a env))
-                                mt-env)))]
+                                env)))]
     [fdC (n a b) (funV n a b)]
     [plusC (l r) (num+ (interp l env) (interp r env))]
     [multC (l r) (num* (interp l env) (interp r env))]
     ))
 
-;; some more complex function definitions for testing:
-(define double (fdC 'double 'x (plusC (idC 'x) (idC 'x))))
-(define quadruple (fdC 'quadruple 'x (appC double (appC double (idC 'x)))))
-(define const5 (fdC 'const5 '_ (numC 5)))
+
 
 (display "\n**** env interp tests ****\n")
-(test (interp (plusC (numC 10) (appC const5 (numC 10))) mt-env) (numV 15))
+(test (interp (plusC (numC 10) (appC (fdC 'const5 '_ (numC 5)) (numC 10)))
+              mt-env)
+      (numV 15))
 
-(test (interp (plusC (numC 10) (appC double (plusC (numC 1) (numC 2)))) mt-env) (numV 16))
-
-(test (interp (plusC (numC 10) (appC quadruple (plusC (numC 1) (numC 2)))) mt-env) (numV 22))
-
-(test/exn (interp (appC (fdC 'f1 'x (appC (fdC 'f2 'y (plusC (idC 'x) (idC 'y)))
+(test (interp (appC (fdC 'f1 'x (appC (fdC 'f2 'y (plusC (idC 'x) (idC 'y)))
                                           (numC 4)))
                         (numC 3))
-                  mt-env)
-          "name not found")
+                  mt-env) (numV 7))
