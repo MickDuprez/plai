@@ -13,8 +13,10 @@ The only way I could get the two tests in the book at this section to pass was t
 The test/exn version was more targeted at proving the function was missing with some extra checking code but as we are no longer using substitution, our functions are being evaluated in place they they always exist.
 It's only the variables that disappear.
 
-Implementing closures is coming later in the chapter, maybe that will help but I can't help think a 'stack' like env would and a way to use it with 'scope' could be a solution.
+Implementing closures is coming later in the chapter, maybe that will help but I can't help think a 'stack' like env and a way to use it with 'scope' could be a solution.
 
 ## Section 7.2 - Nested What?
 
-coming soon...
+I'm putting this book down for a while, maybe indefinitely.
+While I can see the promise of the book I think it would really benifit from having the author/teacher or a TA there to bounce things off.
+The purpose of the book is to make you think and that it does, I practically don't have the time to play 'work out the errors' and my lack of experience with Racket is not helping things at all.
